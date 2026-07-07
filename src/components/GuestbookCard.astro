@@ -1,0 +1,29 @@
+---
+import { formatDateZh } from "@/lib/format";
+
+interface Props {
+  name: string;
+  message: string;
+  date: string;
+  location?: string;
+}
+
+const { name, message, date, location } = Astro.props;
+---
+
+<article class="border-paper-3 bg-paper-2 mb-4 break-inside-avoid rounded-xl border p-5">
+  <p class="text-ink leading-loose whitespace-pre-line">{message}</p>
+  <footer class="text-ink-faint mt-4 flex flex-wrap items-center gap-x-2 text-sm">
+    <span class="text-ink-soft">{name}</span>
+    {
+      location && (
+        <>
+          <span aria-hidden="true">·</span>
+          <span>{location}</span>
+        </>
+      )
+    }
+    <span aria-hidden="true">·</span>
+    <time datetime={date}>{formatDateZh(date)}</time>
+  </footer>
+</article>
