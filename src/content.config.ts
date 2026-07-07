@@ -31,4 +31,29 @@ const guestbook = defineCollection({
   }),
 });
 
-export const collections = { pages, guestbook };
+/**
+ * Book catalog — a single generated data file (see scripts/ingest.ts). It is a
+ * discovery tool, not a live inventory: there is deliberately no
+ * borrowed/available state. Each record needs a unique `id` (canonical ISBN-13
+ * where available, otherwise a slug).
+ */
+const catalog = defineCollection({
+  loader: file("src/data/catalog.json"),
+  schema: z.object({
+    id: z.string(),
+    isbn: z.string().optional(),
+    title: z.string(),
+    subtitle: z.string().optional(),
+    author: z.array(z.string()).default([]),
+    translator: z.array(z.string()).default([]),
+    publisher: z.string().optional(),
+    pubYear: z.number().int().optional(),
+    category: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    language: z.enum(["zh", "en", "other"]).default("zh"),
+    cover: z.string().optional(), // "/covers/<id>.webp"; empty ⇒ placeholder
+    note: z.string().optional(),
+  }),
+});
+
+export const collections = { pages, guestbook, catalog };

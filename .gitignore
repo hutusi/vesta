@@ -22,8 +22,5 @@ bun-debug.log*
 # jetbrains setting folder
 .idea/
 
-# generated search index (rebuilt from catalog.json on every build)
-public/search-index.json
-
-# ingestion caches (metadata lookups); raw exports are handled in Phase 4
+# ingestion caches (metadata lookups)
 scripts/.cache/

@@ -1,0 +1,250 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BookCard from "@/components/BookCard.astro";
+import { getCollection } from "astro:content";
+
+const books = (await getCollection("catalog")).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title, "zh"),
+);
+const total = books.length;
+
+const categories = [
+  ...new Set(books.map((b) => b.data.category).filter((c): c is string => !!c)),
+].sort((a, b) => a.localeCompare(b, "zh"));
+
+const languageLabels: Record<string, string> = {
+  zh: "中文",
+  en: "外文",
+  other: "其他",
+};
+const languages = [...new Set(books.map((b) => b.data.language))];
+const showLangFilter = languages.length > 1;
+
+const pillBase =
+  "shrink-0 rounded-full border border-paper-3 px-3 py-1 text-sm text-ink-soft transition-colors hover:border-brick-soft aria-[pressed=true]:border-brick aria-[pressed=true]:bg-brick aria-[pressed=true]:text-white";
+---
+
+<BaseLayout
+  title="书目"
+  description="只买书图书馆的藏书目录，支持书名、作者与拼音搜索。"
+  locale="zh"
+>
+  <header class="mb-6">
+    <h1 class="font-display text-ink text-4xl">书目</h1>
+    <p
+      class="border-ochre/50 bg-ochre/10 text-ink-soft mt-4 rounded-lg border px-4 py-3 text-sm leading-relaxed"
+    >
+      这里是一份可查阅的藏书清单，帮你在来之前先看看架上有什么。图书馆无人值守、凭良心借还，因此书目<strong
+        class="text-ink">不代表实时在架状态</strong
+      >——某本书也许正被人带回家读着。
+    </p>
+  </header>
+
+  {/* Controls */}
+  <div class="mb-6 space-y-4">
+    <input
+      type="search"
+      id="q"
+      autocomplete="off"
+      placeholder="搜索书名、作者，或拼音（如 sanguo、sgyy）"
+      class="border-paper-3 bg-paper-2 focus:border-brick w-full rounded-lg border px-4 py-3 outline-none"
+    />
+
+    <div class="flex gap-2 overflow-x-auto pb-1" role="group" aria-label="分类筛选">
+      <button type="button" class={pillBase} data-filter="category" data-value="" aria-pressed="true">全部</button>
+      {
+        categories.map((c) => (
+          <button type="button" class={pillBase} data-filter="category" data-value={c} aria-pressed="false">
+            {c}
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      showLangFilter && (
+        <div class="flex gap-2 overflow-x-auto pb-1" role="group" aria-label="语言筛选">
+          <button type="button" class={pillBase} data-filter="language" data-value="" aria-pressed="true">
+            全部语言
+          </button>
+          {languages.map((l) => (
+            <button type="button" class={pillBase} data-filter="language" data-value={l} aria-pressed="false">
+              {languageLabels[l] ?? l}
+            </button>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <p id="count" class="text-ink-faint mb-4 text-sm">共 {total} 本</p>
+
+  <div
+    id="results"
+    class="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+  >
+    {books.map((b) => <BookCard book={b.data} />)}
+  </div>
+
+  <p id="empty" class="text-ink-faint py-16 text-center" hidden>
+    没有找到匹配的书。换个词试试？
+  </p>
+
+  <noscript>
+    <p class="text-ink-faint mt-4 text-sm">开启 JavaScript 即可搜索与按分类筛选。</p>
+  </noscript>
+
+  {/* Detail drawer */}
+  <dialog
+    id="book-dialog"
+    class="text-ink bg-paper m-auto w-[min(32rem,92vw)] rounded-2xl p-0 backdrop:bg-black/40"
+  >
+    <div class="relative p-6">
+      <form method="dialog">
+        <button
+          class="text-ink-faint hover:text-brick absolute top-4 right-4 text-xl leading-none"
+          aria-label="关闭"
+          >✕</button
+        >
+      </form>
+      <div class="flex gap-5">
+        <div id="d-cover" class="w-28 shrink-0"></div>
+        <div class="min-w-0 flex-1">
+          <h2 id="d-title" class="font-display text-2xl leading-snug"></h2>
+          <p id="d-subtitle" class="text-ink-soft mt-1"></p>
+          <dl class="mt-4 space-y-1.5 text-sm">
+            <div id="row-author" class="flex gap-2">
+              <dt class="text-ink-faint w-14 shrink-0">作者</dt>
+              <dd id="d-author"></dd>
+            </div>
+            <div id="row-translator" class="flex gap-2">
+              <dt class="text-ink-faint w-14 shrink-0">译者</dt>
+              <dd id="d-translator"></dd>
+            </div>
+            <div id="row-publisher" class="flex gap-2">
+              <dt class="text-ink-faint w-14 shrink-0">出版</dt>
+              <dd id="d-publisher"></dd>
+            </div>
+            <div id="row-category" class="flex gap-2">
+              <dt class="text-ink-faint w-14 shrink-0">分类</dt>
+              <dd id="d-category"></dd>
+            </div>
+            <div id="row-isbn" class="flex gap-2">
+              <dt class="text-ink-faint w-14 shrink-0">ISBN</dt>
+              <dd id="d-isbn"></dd>
+            </div>
+          </dl>
+          <p
+            id="d-note"
+            class="border-brick-soft text-ink-soft mt-4 border-l-2 pl-3 leading-relaxed"
+          >
+          </p>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</BaseLayout>
+
+<script>
+  import {
+    normalizeQuery,
+    matchesQuery,
+    matchesFilters,
+  } from "@/lib/search.client";
+
+  const cards = [
+    ...document.querySelectorAll<HTMLButtonElement>(".book-card"),
+  ];
+  const input = document.getElementById("q") as HTMLInputElement | null;
+  const countEl = document.getElementById("count");
+  const emptyEl = document.getElementById("empty");
+  const dialog = document.getElementById(
+    "book-dialog",
+  ) as HTMLDialogElement | null;
+
+  const filters = { category: "", language: "" };
+
+  function apply() {
+    const query = normalizeQuery(input?.value ?? "");
+    let shown = 0;
+    for (const card of cards) {
+      const d = card.dataset;
+      const visible =
+        matchesQuery(
+          { search: d.search ?? "", py: d.py ?? "", pyi: d.pyi ?? "" },
+          query,
+        ) &&
+        matchesFilters(
+          { category: d.category ?? "", language: d.language ?? "" },
+          filters,
+        );
+      card.hidden = !visible;
+      if (visible) shown++;
+    }
+    if (countEl) countEl.textContent = `共 ${shown} 本`;
+    if (emptyEl) emptyEl.hidden = shown !== 0;
+  }
+
+  let timer: ReturnType<typeof setTimeout>;
+  input?.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(apply, 120);
+  });
+
+  document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const type = pill.dataset.filter as "category" | "language";
+      filters[type] = pill.dataset.value ?? "";
+      document
+        .querySelectorAll<HTMLButtonElement>(`[data-filter="${type}"]`)
+        .forEach((p) =>
+          p.setAttribute("aria-pressed", String(p === pill)),
+        );
+      apply();
+    });
+  });
+
+  function setRow(rowId: string, ddId: string, value: string) {
+    const dd = document.getElementById(ddId);
+    const row = document.getElementById(rowId);
+    if (dd) dd.textContent = value;
+    if (row) row.hidden = !value;
+  }
+
+  function openBook(card: HTMLButtonElement) {
+    if (!dialog) return;
+    const d = card.dataset;
+    const titleEl = document.getElementById("d-title");
+    const subEl = document.getElementById("d-subtitle");
+    const noteEl = document.getElementById("d-note");
+    if (titleEl) titleEl.textContent = d.title ?? "";
+    if (subEl) {
+      subEl.textContent = d.subtitle ?? "";
+      subEl.hidden = !d.subtitle;
+    }
+    const publisher =
+      d.publisher && d.year
+        ? `${d.publisher} · ${d.year}`
+        : (d.publisher ?? d.year ?? "");
+    setRow("row-author", "d-author", d.author ?? "");
+    setRow("row-translator", "d-translator", d.translator ?? "");
+    setRow("row-publisher", "d-publisher", publisher);
+    setRow("row-category", "d-category", d.category ?? "");
+    setRow("row-isbn", "d-isbn", d.isbn ?? "");
+    if (noteEl) {
+      noteEl.textContent = d.note ?? "";
+      noteEl.hidden = !d.note;
+    }
+    const coverBox = document.getElementById("d-cover");
+    const cover = card.querySelector(".book-cover");
+    if (coverBox) coverBox.replaceChildren(cover ? cover.cloneNode(true) : "");
+    dialog.showModal();
+  }
+
+  cards.forEach((card) => card.addEventListener("click", () => openBook(card)));
+
+  // Close when clicking the backdrop.
+  dialog?.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

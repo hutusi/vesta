@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { pinyin } from "pinyin-pro";
+import CoverPlaceholder from "./CoverPlaceholder.astro";
+
+interface Props {
+  book: CollectionEntry<"catalog">["data"];
+}
+
+const { book } = Astro.props;
+
+const authors = book.author.join("、");
+const translators = book.translator.join("、");
+const tags = book.tags.join("、");
+
+// Build-time pinyin — shipped as plain strings in data attributes, so the
+// browser never loads pinyin-pro. Stray spaces/letters from mixed text stripped.
+const pyText = `${book.title} ${book.author.join(" ")}`;
+const rawPy = pinyin(pyText, { toneType: "none", type: "array" });
+const py = rawPy
+  .join("")
+  .toLowerCase()
+  .replace(/[^a-z0-9]/g, "");
+const pyi = rawPy
+  .map((s) => s[0] ?? "")
+  .join("")
+  .toLowerCase()
+  .replace(/[^a-z0-9]/g, "");
+
+const haystack = [
+  book.title,
+  book.subtitle,
+  ...book.author,
+  ...book.translator,
+  book.publisher,
+  book.category,
+  ...book.tags,
+]
+  .filter(Boolean)
+  .join(" ")
+  .toLowerCase();
+---
+
+<button
+  type="button"
+  class="book-card group hover:border-brick-soft flex flex-col rounded-lg border border-transparent p-2 text-left transition-colors"
+  data-search={haystack}
+  data-py={py}
+  data-pyi={pyi}
+  data-category={book.category ?? ""}
+  data-language={book.language}
+  data-title={book.title}
+  data-subtitle={book.subtitle ?? ""}
+  data-author={authors}
+  data-translator={translators}
+  data-publisher={book.publisher ?? ""}
+  data-year={book.pubYear ? String(book.pubYear) : ""}
+  data-isbn={book.isbn ?? ""}
+  data-tags={tags}
+  data-note={book.note ?? ""}
+  data-cover={book.cover ?? ""}
+>
+  <div class="book-cover w-full overflow-hidden rounded-md shadow-sm transition-transform group-hover:-translate-y-0.5">
+    {
+      book.cover ? (
+        <img
+          src={book.cover}
+          alt={book.title}
+          loading="lazy"
+          width="300"
+          height="400"
+          class="aspect-[3/4] w-full object-cover"
+        />
+      ) : (
+        <CoverPlaceholder title={book.title} author={authors} />
+      )
+    }
+  </div>
+  <div class="mt-2 px-0.5">
+    <p class="text-ink line-clamp-2 text-sm leading-snug font-medium">
+      {book.title}
+    </p>
+    {authors && <p class="text-ink-faint mt-0.5 line-clamp-1 text-xs">{authors}</p>}
+  </div>
+</button>
