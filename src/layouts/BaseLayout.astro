@@ -14,16 +14,19 @@ interface Props {
   narrow?: boolean;
 }
 
-const {
-  title,
-  description = "只买书是一座乡村图书馆，藏在老屋里，自由取阅，凭良心借还。",
-  altUrl,
-  narrow = false,
-} = Astro.props;
+const { title, description, altUrl, narrow = false } = Astro.props;
 
 const locale: Locale =
   Astro.props.locale ?? ((Astro.currentLocale as Locale) || defaultLocale);
 const t = useTranslations(locale);
+
+// Fall back to a locale-appropriate description so English pages don't emit the
+// Chinese default in <meta description>/og:description.
+const metaDescription =
+  description ??
+  (locale === "en"
+    ? "Zhimaishu is a village library tucked inside an old brick house — free to read, borrowed on your honor."
+    : "只买书是一座乡村图书馆，藏在老屋里，自由取阅，凭良心借还。");
 
 const siteName = t("site.name");
 const fullTitle = title ? `${title}｜${siteName}` : `${siteName} · ${t("site.tagline")}`;
@@ -44,7 +47,7 @@ const ogLocale = locale === "en" ? "en_US" : "zh_CN";
     <meta name="generator" content={Astro.generator} />
 
     <title>{fullTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={metaDescription} />
 
     {/* hreflang alternates when a translated counterpart exists */}
     {
@@ -62,7 +65,7 @@ const ogLocale = locale === "en" ? "en_US" : "zh_CN";
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content={ogLocale} />

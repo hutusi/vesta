@@ -20,6 +20,7 @@ import { orderBook, type Book } from "./lib.ts";
 const WIDTH = 400;
 const QUALITY = 80;
 const CONCURRENCY = 8;
+const FETCH_TIMEOUT_MS = 15_000;
 
 async function main() {
   const [, , catalogArg, outDirArg] = process.argv;
@@ -55,7 +56,11 @@ async function main() {
       batch.map(async ([id, url]) => {
         const safe = id.replace(/[^a-z0-9._-]/gi, "_");
         try {
-          const res = await fetch(url);
+          // Bound each request so a single unresponsive host can't hang the
+          // batch (Promise.all waits for all jobs) and stall the whole script.
+          const res = await fetch(url, {
+            signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+          });
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const buf = Buffer.from(await res.arrayBuffer());
           const webp = await sharp(buf)

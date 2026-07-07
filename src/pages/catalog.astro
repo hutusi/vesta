@@ -46,6 +46,7 @@ const pillBase =
       type="search"
       id="q"
       autocomplete="off"
+      aria-label="搜索书目"
       placeholder="搜索书名、作者，或拼音（如 sanguo、sgyy）"
       class="border-paper-3 bg-paper-2 focus:border-brick w-full rounded-lg border px-4 py-3 outline-none"
     />
@@ -97,6 +98,7 @@ const pillBase =
   {/* Detail drawer */}
   <dialog
     id="book-dialog"
+    aria-labelledby="d-title"
     class="text-ink bg-paper m-auto w-[min(32rem,92vw)] rounded-2xl p-0 backdrop:bg-black/40"
   >
     <div class="relative p-6">
