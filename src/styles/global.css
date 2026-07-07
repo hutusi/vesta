@@ -77,3 +77,85 @@
     letter-spacing: normal;
   }
 }
+
+/*
+  .prose — hand-styled long-form typography for markdown content.
+  Kept dependency-free (no @tailwindcss/typography) for tight control over
+  Chinese rhythm and 10-year stability.
+*/
+@layer components {
+  .prose {
+    color: var(--color-ink);
+    font-size: 1.075rem;
+  }
+  .prose > * + * {
+    margin-top: 1.2em;
+  }
+  .prose h2 {
+    margin-top: 2.4em;
+    margin-bottom: 0.2em;
+    font-size: 1.5rem;
+    color: var(--color-ink);
+  }
+  .prose h3 {
+    margin-top: 1.8em;
+    margin-bottom: 0.1em;
+    font-size: 1.2rem;
+    color: var(--color-ink);
+  }
+  .prose p,
+  .prose ul,
+  .prose ol {
+    line-height: 1.9;
+  }
+  .prose a {
+    color: var(--color-brick);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+  .prose a:hover {
+    color: var(--color-brick-strong);
+  }
+  .prose strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4em;
+  }
+  .prose ul {
+    list-style: disc;
+  }
+  .prose ol {
+    list-style: decimal;
+  }
+  .prose li + li {
+    margin-top: 0.4em;
+  }
+  .prose li::marker {
+    color: var(--color-brick-soft);
+  }
+  .prose blockquote {
+    border-left: 3px solid var(--color-brick-soft);
+    padding-left: 1.1em;
+    color: var(--color-ink-soft);
+  }
+  .prose hr {
+    border: 0;
+    border-top: 1px solid var(--color-paper-3);
+    margin: 2.4em 0;
+  }
+  .prose img {
+    border-radius: 0.5rem;
+    max-width: 100%;
+    height: auto;
+  }
+  .prose code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.9em;
+    background: var(--color-paper-2);
+    padding: 0.1em 0.35em;
+    border-radius: 0.3rem;
+  }
+}

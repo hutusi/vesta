@@ -1,0 +1,102 @@
+---
+import { type Locale, navItems, useTranslations } from "@/i18n/ui";
+import LangSwitcher from "./LangSwitcher.astro";
+
+interface Props {
+  locale: Locale;
+  /** URL of this page in the other language, if a counterpart exists. */
+  altUrl?: string;
+}
+
+const { locale, altUrl } = Astro.props;
+const t = useTranslations(locale);
+
+const strip = (p: string) => (p.length > 1 ? p.replace(/\/$/, "") : p);
+const current = strip(Astro.url.pathname);
+
+const links = navItems.map((item) => {
+  const href = locale === "en" && item.enHref ? item.enHref : item.href;
+  return { href, label: t(item.key), active: strip(href) === current };
+});
+---
+
+<header class="border-paper-3 bg-paper/85 sticky top-0 z-30 border-b backdrop-blur">
+  <div
+    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3"
+  >
+    <a href={locale === "en" ? "/en/" : "/"} class="group flex items-baseline gap-2">
+      <span class="font-display text-brick text-2xl leading-none">{t("site.name")}</span>
+      <span class="text-ink-faint hidden text-xs tracking-widest sm:inline">
+        {t("site.tagline")}
+      </span>
+    </a>
+
+    <!-- Desktop navigation -->
+    <nav class="hidden items-center gap-6 md:flex" aria-label={t("nav.menu")}>
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            aria-current={l.active ? "page" : undefined}
+            class:list={[
+              "hover:text-brick text-sm transition-colors",
+              l.active ? "text-brick font-medium" : "text-ink-soft",
+            ]}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <LangSwitcher altUrl={altUrl} currentLocale={locale} class="ml-1" />
+    </nav>
+
+    <!-- Mobile navigation: pure-CSS disclosure, works without JS -->
+    <details class="group relative md:hidden">
+      <summary
+        class="text-ink flex cursor-pointer list-none items-center gap-1 text-sm"
+        aria-label={t("nav.menu")}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+      </summary>
+      <nav
+        class="border-paper-3 bg-paper absolute right-0 mt-3 flex w-44 flex-col gap-1 rounded-lg border p-2 shadow-lg"
+        aria-label={t("nav.menu")}
+      >
+        {
+          links.map((l) => (
+            <a
+              href={l.href}
+              aria-current={l.active ? "page" : undefined}
+              class:list={[
+                "hover:bg-paper-2 rounded px-3 py-2 text-sm",
+                l.active ? "text-brick font-medium" : "text-ink-soft",
+              ]}
+            >
+              {l.label}
+            </a>
+          ))
+        }
+        {
+          altUrl && (
+            <div class="border-paper-3 mt-1 border-t px-3 pt-2">
+              <LangSwitcher altUrl={altUrl} currentLocale={locale} />
+            </div>
+          )
+        }
+      </nav>
+    </details>
+  </div>
+</header>

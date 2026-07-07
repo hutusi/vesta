@@ -1,21 +1,13 @@
 ---
-import "../styles/global.css";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<!doctype html>
-<html lang="zh-Hans">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>只买书 · 乡村图书馆</title>
-  </head>
-  <body>
-    <main class="mx-auto flex min-h-screen max-w-readable flex-col justify-center px-6">
-      <p class="text-brick font-serif text-sm tracking-widest">乡村图书馆</p>
-      <h1 class="font-display mt-2 text-5xl text-ink">只买书</h1>
-      <p class="text-ink-soft mt-6 text-lg">
-        一座藏在老屋里的图书馆，正在筹建中。
-      </p>
-    </main>
-  </body>
-</html>
+<BaseLayout>
+  <section class="mx-auto max-w-readable py-10">
+    <p class="text-brick font-serif text-sm tracking-widest">乡村图书馆</p>
+    <h1 class="font-display text-ink mt-3 text-5xl">只买书</h1>
+    <p class="text-ink-soft mt-6 text-lg leading-relaxed">
+      一座藏在老屋里的图书馆，自由取阅，凭良心借还。网站正在筹建中。
+    </p>
+  </section>
+</BaseLayout>
