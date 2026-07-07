@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+/*
+  只买书 (Zhimaishu) design tokens — Tailwind v4 CSS-first config.
+  There is no tailwind.config.js; everything the utilities read lives here.
+
+  Aesthetic: warm paper + red brick (the house), quiet and literary.
+*/
+@theme {
+  /* Type — system CJK stacks so we ship zero webfont weight.
+     The display face optionally upgrades to a self-hosted subset (Phase 2+). */
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC",
+    "Source Han Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC",
+    ui-serif, serif;
+  --font-display: var(--font-serif);
+
+  /* Warm paper + red-brick palette */
+  --color-paper: #f8f3ea; /* page background — warm paper */
+  --color-paper-2: #f1e8d8; /* raised surfaces, cards */
+  --color-paper-3: #e7dac4; /* borders, dividers */
+  --color-ink: #2c2622; /* primary text — warm near-black */
+  --color-ink-soft: #5f554a; /* secondary text */
+  --color-ink-faint: #8a7f70; /* captions, meta */
+
+  --color-brick: #9d3f2b; /* red brick — primary accent */
+  --color-brick-strong: #7d3020;
+  --color-brick-soft: #c06a52;
+  --color-ochre: #bd8a3d; /* warm gold highlight */
+  --color-sage: #6f7a5a; /* muted green, sparing use */
+
+  /* Editorial max line-length for reading */
+  --spacing-readable: 42rem;
+}
+
+@layer base {
+  html {
+    /* CJK wants looser leading and a hair of tracking */
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  ::selection {
+    background-color: var(--color-brick);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brick);
+    outline-offset: 2px;
+  }
+
+  /* Latin runs inside Chinese text: let the Latin stack shape them */
+  :lang(en) {
+    letter-spacing: normal;
+  }
+}

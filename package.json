@@ -1,0 +1,30 @@
+{
+  "name": "vesta",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "只买书 (Zhimaishu) — a nonprofit rural library portal and catalog. 'Vesta' is the internal codename only.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro",
+    "ingest": "bun run scripts/ingest.ts",
+    "covers": "bun run scripts/covers.ts",
+    "build:index": "bun run scripts/build-index.ts"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.3",
+    "astro": "7.0.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.9",
+    "@tailwindcss/vite": "4.3.2",
+    "tailwindcss": "4.3.2",
+    "typescript": "6.0.3"
+  }
+}
