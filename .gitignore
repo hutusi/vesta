@@ -24,3 +24,6 @@ bun-debug.log*
 
 # ingestion caches (metadata lookups)
 scripts/.cache/
+
+# raw scanning-app exports — the founder's source data, regenerable, may be large
+data/raw/
