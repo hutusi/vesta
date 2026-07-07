@@ -2,12 +2,99 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<BaseLayout>
-  <section class="mx-auto max-w-readable py-10">
-    <p class="text-brick font-serif text-sm tracking-widest">乡村图书馆</p>
-    <h1 class="font-display text-ink mt-3 text-5xl">只买书</h1>
-    <p class="text-ink-soft mt-6 text-lg leading-relaxed">
-      一座藏在老屋里的图书馆，自由取阅，凭良心借还。网站正在筹建中。
+<BaseLayout locale="zh" altUrl="/en/">
+  {/* Hero */}
+  <section class="mx-auto max-w-3xl px-1 pt-10 pb-16 text-center sm:pt-16">
+    <p class="text-ink-faint text-sm tracking-[0.3em]">乡村图书馆</p>
+    <h1 class="font-display text-brick mt-4 text-6xl sm:text-7xl">只买书</h1>
+    <p class="text-ink-soft mx-auto mt-8 max-w-xl text-lg leading-relaxed">
+      一座藏在老屋里的图书馆。<br class="hidden sm:block" />
+      自由取阅，凭良心借还，等着某个爱书的人推门遇见它。
+    </p>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/catalog"
+        class="bg-brick hover:bg-brick-strong rounded-full px-6 py-3 text-white transition-colors"
+      >
+        浏览书目
+      </a>
+      <a
+        href="/visit"
+        class="border-brick text-brick hover:bg-brick rounded-full border px-6 py-3 transition-colors hover:text-white"
+      >
+        到访图书馆
+      </a>
+    </div>
+  </section>
+
+  {/* The name */}
+  <section class="border-paper-3 mx-auto max-w-readable border-t py-14">
+    <h2 class="font-display text-ink text-2xl">这个名字的来历</h2>
+    <p class="text-ink-soft mt-5 leading-loose">
+      很多年前，我在网上发起过一个自嘲的社群，叫“只买书不读书”——书越买越多，读完的却没几本。后来我把攒下的书搬回老家，做成一座免费的图书馆，就顺手叫它<strong
+        class="text-ink">「只买书」</strong
+      >。既然一个人读不完，那就让更多人来读。
+    </p>
+  </section>
+
+  {/* House + books */}
+  <section class="border-paper-3 mx-auto max-w-readable border-t py-14">
+    <h2 class="font-display text-ink text-2xl">一栋老屋，五十箱书</h2>
+    <p class="text-ink-soft mt-5 leading-loose">
+      图书馆没有独立的馆舍，就在我家那栋三十年的红砖房里。堂屋的两面墙，从地板钉到接近屋顶，摆满木书架。架上的书是我几十年一本本买下的，约五十个纸箱，从上海一路寄回村里——如今回到乡下的老屋，等着被新的人翻开。
+    </p>
+  </section>
+
+  {/* Treasure */}
+  <section class="border-paper-3 mx-auto max-w-readable border-t py-14">
+    <h2 class="font-display text-ink text-2xl">像基督山的宝藏</h2>
+    <p class="text-ink-soft mt-5 leading-loose">
+      小时候，我在祖父的旧屋里偶然翻出一摞绘本和一本《绿野仙踪》，就像基督山伯爵挖出了藏了几百年的宝藏——我一头跌进故事里，从此爱上了阅读。
+    </p>
+    <blockquote
+      class="border-brick-soft text-ink mt-8 border-l-4 pl-5 text-lg leading-loose italic"
+    >
+      我把这座图书馆放在这里，是想赌一个可能：某个爱书的乡村孩子，会像当年的我一样推开门，遇见改变他一生的那本书。
+    </blockquote>
+    <p class="mt-8">
+      <a
+        href="/about"
+        class="text-brick hover:text-brick-strong underline underline-offset-4"
+        >读完整的故事 →</a
+      >
+    </p>
+  </section>
+
+  {/* Honor system */}
+  <section class="border-paper-3 mx-auto max-w-readable border-t py-14">
+    <h2 class="font-display text-ink text-2xl">无人值守，凭良心借还</h2>
+    <p class="text-ink-soft mt-5 leading-loose">
+      这里没有借书证，没有管理员，也没有营业时间的铁门。你可以随时进来，坐下读，或把书带回家慢慢看，读完再送回来。它靠的是一件很旧、也很珍贵的东西——<strong
+        class="text-ink">良心</strong
+      >。
+    </p>
+    <p class="mt-6">
+      <a
+        href="/visit"
+        class="text-brick hover:text-brick-strong underline underline-offset-4"
+        >怎么找到这里、怎么借书 →</a
+      >
+    </p>
+  </section>
+
+  {/* Bottom CTA */}
+  <section class="mx-auto max-w-readable py-16 text-center">
+    <p class="text-ink-soft">
+      想让自己的书在这里被更多人读到？
+      <a
+        href="/donate"
+        class="text-brick hover:text-brick-strong underline underline-offset-4"
+        >欢迎赠书</a
+      >。 有话想说？来 <a
+        href="/guestbook"
+        class="text-brick hover:text-brick-strong underline underline-offset-4"
+        >留言墙</a
+      > 坐坐。
     </p>
   </section>
 </BaseLayout>
