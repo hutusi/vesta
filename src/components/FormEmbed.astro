@@ -1,0 +1,46 @@
+---
+import { site } from "@/config";
+
+interface Props {
+  /** Third-party form URL (e.g. 金数据). Empty ⇒ show only the email fallback. */
+  url?: string;
+  title: string;
+  /** Prefilled subject for the mailto fallback. */
+  emailSubject?: string;
+  /** Height of the embedded iframe, in px. */
+  height?: number;
+}
+
+const { url, title, emailSubject, height = 720 } = Astro.props;
+const mailto = `mailto:${site.email}${
+  emailSubject ? `?subject=${encodeURIComponent(emailSubject)}` : ""
+}`;
+---
+
+{
+  url ? (
+    <div class="border-paper-3 bg-paper-2 overflow-hidden rounded-xl border">
+      <iframe
+        src={url}
+        title={title}
+        loading="lazy"
+        class="w-full"
+        style={`height:${height}px;`}
+        allow="clipboard-write"
+      />
+    </div>
+  ) : (
+    <div class="border-paper-3 bg-paper-2 text-ink-soft rounded-xl border border-dashed p-6 text-sm">
+      在线表单即将上线。目前请通过下方邮箱与我们联系。
+    </div>
+  )
+}
+
+<p class="text-ink-soft mt-4 text-sm">
+  不方便填表？也可以直接
+  <a
+    href={mailto}
+    class="text-brick hover:text-brick-strong underline underline-offset-4"
+    >发邮件给我们</a
+  >（{site.email}）。
+</p>

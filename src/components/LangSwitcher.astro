@@ -1,0 +1,29 @@
+---
+import { type Locale, languageNames } from "@/i18n/ui";
+
+interface Props {
+  /** URL of this same page in the other language; omit to hide the switcher. */
+  altUrl?: string;
+  currentLocale: Locale;
+  class?: string;
+}
+
+const { altUrl, currentLocale, class: className } = Astro.props;
+const target: Locale = currentLocale === "zh" ? "en" : "zh";
+---
+
+{
+  altUrl && (
+    <a
+      href={altUrl}
+      lang={target}
+      rel="alternate"
+      class:list={[
+        "text-ink-soft hover:text-brick text-sm underline-offset-4 hover:underline",
+        className,
+      ]}
+    >
+      {languageNames[target]}
+    </a>
+  )
+}

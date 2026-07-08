@@ -1,0 +1,5 @@
+# Cloudflare Pages headers.
+# Book covers are content-addressed by book id and effectively immutable —
+# cache them hard. Astro's own hashed assets are handled by the framework.
+/covers/*
+  Cache-Control: public, max-age=31536000, immutable

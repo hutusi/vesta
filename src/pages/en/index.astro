@@ -1,0 +1,84 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout locale="en" altUrl="/">
+  {/* Hero */}
+  <section class="mx-auto max-w-3xl px-1 pt-10 pb-16 text-center sm:pt-16">
+    <p class="text-ink-faint text-sm tracking-[0.3em]">A VILLAGE LIBRARY</p>
+    <h1 class="font-display text-brick mt-4 text-6xl sm:text-7xl" lang="zh-Hans">
+      只买书
+    </h1>
+    <p class="text-ink-faint mt-2 text-sm tracking-widest">ZHIMAISHU</p>
+    <p class="text-ink-soft mx-auto mt-8 max-w-xl text-lg leading-relaxed">
+      A library tucked inside an old brick house — free to read, borrowed on
+      your honor, waiting for someone who loves books to push open the door.
+    </p>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/catalog"
+        class="bg-brick hover:bg-brick-strong rounded-full px-6 py-3 text-white transition-colors"
+      >
+        Browse the catalog
+      </a>
+      <a
+        href="/en/visit"
+        class="border-brick text-brick hover:bg-brick rounded-full border px-6 py-3 transition-colors hover:text-white"
+      >
+        Plan a visit
+      </a>
+    </div>
+  </section>
+
+  {/* The name */}
+  <section class="border-paper-3 mx-auto max-w-readable border-t py-14">
+    <h2 class="font-display text-ink text-2xl">The name is a joke</h2>
+    <p class="text-ink-soft mt-5 leading-loose">
+      Years ago I started a self-mocking online community called
+      <span lang="zh-Hans">「只买书不读书」</span> — "only buying books, never
+      reading them." When I moved my hoard back home and made it a free library,
+      I kept the joke and called it
+      <strong class="text-ink" lang="zh-Hans">只买书</strong>, "Only Buying
+      Books." If one person can't read them all, let more people come and read.
+    </p>
+  </section>
+
+  {/* Treasure */}
+  <section class="border-paper-3 mx-auto max-w-readable border-t py-14">
+    <h2 class="font-display text-ink text-2xl">Like the treasure of Monte Cristo</h2>
+    <p class="text-ink-soft mt-5 leading-loose">
+      As a child I found a pile of picture books and a copy of <em
+        >The Wizard of Oz</em
+      > in my grandfather's old house — it felt like unearthing a hidden
+      treasure. Those books are why I love reading. I've left this library here
+      as a wager: that some book-loving village child will meet the book that
+      changes their life.
+    </p>
+    <p class="mt-8">
+      <a
+        href="/en/about"
+        class="text-brick hover:text-brick-strong underline underline-offset-4"
+        >Read the whole story →</a
+      >
+    </p>
+  </section>
+
+  {/* Honor system */}
+  <section class="border-paper-3 mx-auto max-w-readable border-t py-14">
+    <h2 class="font-display text-ink text-2xl">Unstaffed, on your honor</h2>
+    <p class="text-ink-soft mt-5 leading-loose">
+      No library card, no librarian, no closing time. Come in whenever you like,
+      sit and read, or take a book home and bring it back when you're done. What
+      holds it together is something old and precious: <strong class="text-ink"
+        >your conscience</strong
+      >.
+    </p>
+    <p class="mt-6">
+      <a
+        href="/en/visit"
+        class="text-brick hover:text-brick-strong underline underline-offset-4"
+        >How to get here and how to borrow →</a
+      >
+    </p>
+  </section>
+</BaseLayout>

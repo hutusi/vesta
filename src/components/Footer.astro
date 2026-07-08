@@ -1,0 +1,28 @@
+---
+import { type Locale, useTranslations } from "@/i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-paper-3 text-ink-faint mt-24 border-t">
+  <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-10 text-sm sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex flex-col gap-1">
+      <span class="text-ink-soft">
+        <span class="font-display text-brick">{t("site.name")}</span>
+        · {t("footer.honor")}
+      </span>
+      <span>{t("footer.rights")}</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span>zhimaishu.com</span>
+      <span aria-hidden="true">·</span>
+      <span>© {year}</span>
+    </div>
+  </div>
+</footer>

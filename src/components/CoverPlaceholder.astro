@@ -1,0 +1,27 @@
+---
+import { hashHue } from "@/lib/cover";
+
+interface Props {
+  title: string;
+  author?: string;
+  class?: string;
+}
+
+const { title, author, class: className } = Astro.props;
+const hue = hashHue(title);
+const bg = `hsl(${hue} 30% 84%)`;
+const fg = `hsl(${hue} 45% 26%)`;
+const spine = `hsl(${hue} 40% 66%)`;
+---
+
+<div
+  class:list={[
+    "flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-md border-l-4 p-3",
+    className,
+  ]}
+  style={`background:${bg}; color:${fg}; border-left-color:${spine};`}
+  aria-hidden="true"
+>
+  <span class="font-serif text-sm leading-snug line-clamp-4">{title}</span>
+  {author && <span class="line-clamp-1 text-[0.7rem] opacity-80">{author}</span>}
+</div>

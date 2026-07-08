@@ -1,0 +1,48 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import FormEmbed from "@/components/FormEmbed.astro";
+import GuestbookCard from "@/components/GuestbookCard.astro";
+import { forms } from "@/config";
+import { getCollection } from "astro:content";
+
+const entries = (await getCollection("guestbook")).sort((a, b) =>
+  b.data.date.localeCompare(a.data.date),
+);
+---
+
+<BaseLayout
+  title="留言墙"
+  description="读者、访客、路过的人，在只买书图书馆留下的话。"
+  locale="zh"
+  narrow
+>
+  <header class="border-paper-3 mb-8 border-b pb-6">
+    <h1 class="font-display text-ink text-4xl">留言墙</h1>
+    <p class="text-ink-soft mt-4 leading-loose">
+      读到的一本书，想说的一句话，或者只是路过时的一个招呼——都欢迎留在这里。留言经过屋主确认后，会陆续贴上这面墙。
+    </p>
+  </header>
+
+  <section class="mb-12">
+    <FormEmbed url={forms.guestbook} title="留言" emailSubject="给只买书图书馆的留言" />
+  </section>
+
+  {
+    entries.length > 0 ? (
+      <section class="columns-1 gap-4 sm:columns-2" aria-label="留言">
+        {entries.map((entry) => (
+          <GuestbookCard
+            name={entry.data.name}
+            message={entry.data.message}
+            date={entry.data.date}
+            location={entry.data.location}
+          />
+        ))}
+      </section>
+    ) : (
+      <p class="text-ink-faint py-10 text-center">
+        还没有留言。来做第一个在这面墙上写字的人吧。
+      </p>
+    )
+  }
+</BaseLayout>
